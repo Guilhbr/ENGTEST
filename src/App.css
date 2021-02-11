@@ -5,10 +5,10 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin: 1rem;
 }
 
 .profileSection {
+  padding: 1rem;
   margin-bottom: 2rem;
 }
 
@@ -19,6 +19,14 @@ body {
   margin-bottom: 1rem;
 }
 
+.profileHeader {
+  padding: 1rem;
+  background: rgba(200,200,200, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .dataEntry {
   display: flex;
   flex-direction: row;
@@ -27,4 +35,22 @@ body {
 .dataEntryTitle {
   font-weight: 500;
   margin-right: 0.5rem;
+}
+
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 90vh;
+}
+
+.loginTitle {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.loginError {
+  color: red;
 }

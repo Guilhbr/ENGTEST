@@ -1,5 +1,6 @@
 import React from 'react';
 import DataEntry from '../Components/DataEntry'
+import {useHistory} from 'react-router-dom'
 
 type UserData = {
     id: number,
@@ -18,13 +19,21 @@ type GeneticData = {
     date: string
 }
 
+
 function Profile() {
+
+    function logout() {
+        localStorage.removeItem('ACCESS_TOKEN')
+        history.push('./login')
+    }
+    
     let geneticData: GeneticData = {
         covid: true,
         bloodType: 'O+',
         location: 'Ma On Shan',
         date: '20/01/2021'
     }
+
     let user: UserData = {
         id: 1,
         firstName: 'Joe',
@@ -34,28 +43,36 @@ function Profile() {
         policy: 'ASJU43SH',
         data: geneticData,
     }
-  return (
-    <div className="profileContainer">
-        <div className="profileSection">
-            <div className="profileTitle">Profile</div>
-            <div>
-                <DataEntry title={'Name'} result={`${user.firstName} ${user.lastName}`}></DataEntry>
-                <DataEntry title={'Email'} result={user.email}></DataEntry>
-                <DataEntry title={'Birthdate'} result={user.dob}></DataEntry>
-                <DataEntry title={'Policy'} result={user.policy}></DataEntry>
+
+    const history = useHistory();
+    const authUser = localStorage.getItem('ACCESS_TOKEN')
+
+    return (
+        <div className="profileContainer">
+            <div className="profileHeader">
+                <div>Logged in as <span className="fw-bold">{authUser}</span></div>
+                <button type="button" onClick={logout} className="btn btn-secondary">Logout</button>
+            </div>
+            <div className="profileSection">
+                <div className="profileTitle">Profile</div>
+                <div>
+                    <DataEntry title={'Name'} result={`${user.firstName} ${user.lastName}`}></DataEntry>
+                    <DataEntry title={'Email'} result={user.email}></DataEntry>
+                    <DataEntry title={'Birthdate'} result={user.dob}></DataEntry>
+                    <DataEntry title={'Policy'} result={user.policy}></DataEntry>
+                </div>
+            </div>
+            <div className="profileSection">
+                <div className="profileTitle">Results</div>
+                <div>
+                    <DataEntry title={'Covid-19'} result={user.data.covid ? 'Positive' : 'Negative'}></DataEntry>
+                    <DataEntry title={'Blood Type'} result={user.data.bloodType}></DataEntry>
+                    <DataEntry title={'Test Location'} result={user.data.location}></DataEntry>
+                    <DataEntry title={'Test Date'} result={user.data.date}></DataEntry>
+                </div>
             </div>
         </div>
-        <div className="profileSection">
-            <div className="profileTitle">Results</div>
-            <div>
-                <DataEntry title={'Covid-19'} result={user.data.covid ? 'Positive' : 'Negative'}></DataEntry>
-                <DataEntry title={'Blood Type'} result={user.data.bloodType}></DataEntry>
-                <DataEntry title={'Test Location'} result={user.data.location}></DataEntry>
-                <DataEntry title={'Test Date'} result={user.data.date}></DataEntry>
-            </div>
-        </div>
-    </div>
-  );
+    );
 }
 
 export default Profile;
