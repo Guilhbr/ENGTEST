@@ -1,5 +1,5 @@
 import React from 'react';
-import DataEntry from '../Atoms/DataEntry'
+import DataEntry from '../Components/DataEntry'
 
 type UserData = {
     id: number,
