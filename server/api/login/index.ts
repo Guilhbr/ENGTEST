@@ -1,10 +1,5 @@
 import {Request, Response} from 'express'
-const users = [
-    {
-        username: 'Joe',
-        password: '1234'
-    }
-]
+import {users} from '../../data/mockData'
 
 export function login(req: Request, res: Response) {
     const {username, password} = req.body
