@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import {login} from '../api/login'
 
 function Login () {
     const [username, setUsername] = useState('')
@@ -18,17 +19,19 @@ function Login () {
     function handleKeyDown (e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter') {
             e.preventDefault()
-            login()
+            onLogin()
         }
     }
 
-    function login() {
-        if (username === 'Joe' && password === '1234') {
-            localStorage.setItem('ACCESS_TOKEN', username)
-            history.push('/profile')
-        } else {
-            setError('Wrong username or password')
-        }
+    function onLogin() {
+        login(username, password).then(message => {
+            if (message === username) {
+                localStorage.setItem('ACCESS_TOKEN', username)
+                history.push('/profile')
+            } else {
+                setError(message)
+            }
+        })
     }
 
     return (
@@ -45,7 +48,7 @@ function Login () {
                         <input type="text" className="form-control" value={password} 
                             onChange={changePassword} onKeyDown={handleKeyDown} placeholder="e.g. 1234"></input>
                     </div>
-                    <button type="button" onClick={login} className="btn btn-primary">Login</button>
+                    <button type="button" onClick={onLogin} className="btn btn-primary">Login</button>
                     <div className="mb3">
                         <div className="loginError">{error}</div>
                     </div>
