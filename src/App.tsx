@@ -1,4 +1,3 @@
-import React from 'react';
 import Profile from './Pages/Profile'
 import Login from './Pages/Login'
 import Home from './Pages/Home'
@@ -6,8 +5,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect
 } from 'react-router-dom'
 import PrivateRoute from './Components/PrivateRoute'
 import './App.css';
