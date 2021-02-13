@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom'
 
 type UserData = {
     id: number
+    username: string
     firstName: string
     lastName: string
     email: string
@@ -31,6 +32,7 @@ const initData: GeneticData = {
 
 let initUser: UserData = {
     id: -1,
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -39,21 +41,25 @@ let initUser: UserData = {
     geneticId: 1,
 }
 
-
 function Profile() {
     const [user, setUser] = useState(initUser)
     const [geneticData, setGeneticData] = useState(initData)
 
     useEffect(() => {
-        if (authUser) {
-            getUser(authUser).then(userRes => {
+        getUser().then(userRes => {
+            if (userRes.status === 401) {
+                logout()
+            } else {
                 setUser(userRes)
-                getGeneticData(userRes.geneticId).then(dataRes => {
-                    console.log(dataRes)
+                getGeneticData().then(dataRes => {
                     setGeneticData(dataRes)
+                }).catch(err => {
+                    console.log(err)
                 })
-            })
-        }
+            }
+        }).catch(err => {
+            console.log(err)
+        })
     }, [])
 
     function logout() {
@@ -62,12 +68,12 @@ function Profile() {
     }
 
     const history = useHistory();
-    const authUser = localStorage.getItem('ACCESS_TOKEN')
-
     return (
         <div className="profileContainer">
             <div className="profileHeader">
-                <div>Logged in as <span className="fw-bold">{authUser}</span></div>
+                {user.username && 
+                    <div>Logged in as <span className="fw-bold">{user.username}</span></div>
+                }
                 <button type="button" onClick={logout} className="btn btn-secondary">Logout</button>
             </div>
             {user.id !== -1 &&

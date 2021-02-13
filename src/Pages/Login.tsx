@@ -25,8 +25,8 @@ function Login () {
 
     function onLogin() {
         login(username, password).then(message => {
-            if (message === username) {
-                localStorage.setItem('ACCESS_TOKEN', username)
+            if (message.status === 200) {
+                localStorage.setItem('ACCESS_TOKEN', message.data)
                 history.push('/profile')
             } else {
                 setError(message)

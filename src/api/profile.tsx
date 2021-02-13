@@ -1,19 +1,18 @@
 import axios from 'axios'
+const authUser = localStorage.getItem('ACCESS_TOKEN')
 
-export const getUser = async (username: string) => {
-    return await axios.post('/user', { username }).then(response => {
+export const getUser = async () => {
+    return await axios.get('/user', {headers: {'Authorization': authUser}}).then(response => {
         return response.data
     }).catch(err => {
-        console.log('error getting user data')
-        return 'Could not find user data.'
+        throw err
     })
 }
 
-export const getGeneticData = async (id: number) => {
-    return await axios.post('/user/geneticData', { id }).then(response => {
+export const getGeneticData = async () => {
+    return await axios.get('/user/geneticData', {headers: {'Authorization': authUser}}).then(response => {
         return response.data
     }).catch(err => {
-        console.log('error getting genetic data')
-        return 'Could not find genetic data.'
+        throw err
     })
 }

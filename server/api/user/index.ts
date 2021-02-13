@@ -1,18 +1,37 @@
 import { isExpressionStatement } from "typescript";
 import express, {Request, Response} from 'express'
-import {users, geneticDatas} from '../../data/mockData'
+import {geneticDatas} from '../../data/mockData'
 const router = express.Router()
 
-router.post('/', (req: Request, res: Response) => {
-    const { username } = req.body
-    const user = users.find(user => user.username === username)
-    res.send(user)
+router.get('/', (req: Request, res: Response) => {
+    const { user } = req.body
+    const sensitiveUser = {
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        dob: user.dob,
+        policy: user.policy,
+    }
+    res.send(sensitiveUser)
 })
 
-router.post('/geneticData', (req: Request, res: Response) => {
-    const { id } = req.body
-    const geneticData = geneticDatas.find(data => data.id === id)
-    res.send(geneticData)
+router.get('/geneticData', (req: Request, res: Response) => {
+    const { user } = req.body
+    const geneticData = geneticDatas.find(data => data.id === user.geneticId)
+    if (geneticData) {
+        const sensitiveData = {
+            id: geneticData.id,
+            covid: geneticData.covid,
+            bloodType: geneticData.bloodType,
+            testLocation: geneticData.testLocation,
+            testDate: geneticData.testDate
+        }
+        res.send(sensitiveData)
+    } else {
+        res.status(404).send('No Genetic Data Found')
+    }
 }) 
 
 export default router
