@@ -13,16 +13,22 @@ interface TokenInterface {
 export const authUser = (req: Request, res: Response, next: NextFunction) => {
     try {
         const authToken = req.headers.authorization || ''
-        const decodedToken = jwt.verify(authToken, 'prenetics')
-        const id = (decodedToken as TokenInterface).data.id
-        const user = users.find(user => user.id === id)
-        req.body.user = user
-        if (user) {
-            next()
-        } else {
-            throw 'Invalid ID'
-        }
-    } catch {
-        res.status(401).send({data: 'Unauthorized', status: 401})
+        jwt.verify(authToken, 'prenetics', (err, decoded) => {
+            if (err) {
+                console.log(err)
+                throw err 
+            }
+            const id = (decoded as TokenInterface).data.id
+            const user = users.find(user => user.id === id)
+            req.body.user = user
+            if (user) {
+                next()
+            } else {
+                throw 'Unauthorized'
+            }
+        })
+    } catch (err){
+        res.status(401).send('Unauthorized')
+        next(err)
     }
 }

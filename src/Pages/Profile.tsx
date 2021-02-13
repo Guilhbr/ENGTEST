@@ -9,7 +9,7 @@ type UserData = {
     firstName: string
     lastName: string
     email: string
-    dob: Date
+    dob: string
     policy: string
     geneticId: number
 }
@@ -19,7 +19,7 @@ type GeneticData = {
     covid: boolean
     bloodType: string
     testLocation: string
-    testDate: Date
+    testDate: string
 }
 
 const initData: GeneticData = {
@@ -27,7 +27,7 @@ const initData: GeneticData = {
     covid: false,
     bloodType: '',
     testLocation: '',
-    testDate: new Date()
+    testDate: ''
 }
 
 let initUser: UserData = {
@@ -36,7 +36,7 @@ let initUser: UserData = {
     firstName: '',
     lastName: '',
     email: '',
-    dob: new Date(),
+    dob: '',
     policy: '',
     geneticId: 1,
 }
@@ -47,24 +47,27 @@ function Profile() {
 
     useEffect(() => {
         getUser().then(userRes => {
-            if (userRes.status === 401) {
-                logout()
-            } else {
-                setUser(userRes)
-                getGeneticData().then(dataRes => {
-                    setGeneticData(dataRes)
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
+            setUser(userRes)
+            getGeneticData().then(dataRes => {
+                setGeneticData(dataRes)
+            }).catch(err => {
+                console.log(err)
+            })
         }).catch(err => {
-            console.log(err)
+            if (err.status === 401)  {
+                logout()
+            }
+            console.log(err)    
         })
     }, [])
 
     function logout() {
         localStorage.removeItem('ACCESS_TOKEN')
         history.push('./login')
+    }
+
+    function dateFormat(date: string) {
+        return new Intl.DateTimeFormat('en-GB').format(new Date(date))
     }
 
     const history = useHistory();
@@ -82,7 +85,7 @@ function Profile() {
                     <div>
                         <DataEntry title={'Name'} result={`${user.firstName} ${user.lastName}`}></DataEntry>
                         <DataEntry title={'Email'} result={user.email}></DataEntry>
-                        <DataEntry title={'Birthdate'} result={user.dob.toString()}></DataEntry>
+                        <DataEntry title={'Birthdate'} result={dateFormat(user.dob)}></DataEntry>
                         <DataEntry title={'Policy'} result={user.policy}></DataEntry>
                     </div> 
                 </div> 
@@ -94,7 +97,7 @@ function Profile() {
                         <DataEntry title={'Covid-19'} result={geneticData.covid ? 'Positive' : 'Negative'}></DataEntry>
                         <DataEntry title={'Blood Type'} result={geneticData.bloodType}></DataEntry>
                         <DataEntry title={'Test Location'} result={geneticData.testLocation}></DataEntry>
-                        <DataEntry title={'Test Date'} result={geneticData.testDate.toString()}></DataEntry>
+                        <DataEntry title={'Test Date'} result={dateFormat(geneticData.testDate)}></DataEntry>
                     </div>
                 </div>
             }

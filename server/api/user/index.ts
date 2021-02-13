@@ -1,5 +1,4 @@
-import { isExpressionStatement } from "typescript";
-import express, {Request, Response} from 'express'
+import express, {NextFunction, Request, Response} from 'express'
 import {geneticDatas} from '../../data/mockData'
 const router = express.Router()
 
@@ -17,20 +16,25 @@ router.get('/', (req: Request, res: Response) => {
     res.send(sensitiveUser)
 })
 
-router.get('/geneticData', (req: Request, res: Response) => {
+router.get('/geneticData', (req: Request, res: Response, next: NextFunction) => {
     const { user } = req.body
-    const geneticData = geneticDatas.find(data => data.id === user.geneticId)
-    if (geneticData) {
-        const sensitiveData = {
-            id: geneticData.id,
-            covid: geneticData.covid,
-            bloodType: geneticData.bloodType,
-            testLocation: geneticData.testLocation,
-            testDate: geneticData.testDate
+    try {
+        const geneticData = geneticDatas.find(data => data.id === user.geneticId)
+        if (geneticData) {
+            const sensitiveData = {
+                id: geneticData.id,
+                covid: geneticData.covid,
+                bloodType: geneticData.bloodType,
+                testLocation: geneticData.testLocation,
+                testDate: geneticData.testDate
+            }
+            res.send(sensitiveData)
+        } else {
+            throw 'No Genetic Data Found'
         }
-        res.send(sensitiveData)
-    } else {
+    } catch (err) {
         res.status(404).send('No Genetic Data Found')
+        next(err)
     }
 }) 
 
