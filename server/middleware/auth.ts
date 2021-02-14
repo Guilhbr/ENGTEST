@@ -13,7 +13,7 @@ interface TokenInterface {
 export const authUser = (req: Request, res: Response, next: NextFunction) => {
     try {
         const authToken = req.headers.authorization || ''
-        jwt.verify(authToken, 'prenetics', (err, decoded) => {
+        jwt.verify(authToken, 'icecream', (err, decoded) => {
             if (err) {
                 console.log(err)
                 throw err 

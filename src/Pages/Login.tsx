@@ -9,7 +9,7 @@ function Login () {
     let history = useHistory()
 
     function changeUsername (e: React.ChangeEvent<HTMLInputElement>) {
-        setUsername(e.target.value)
+        setUsername(e.target.value.trim())
     }
 
     function changePassword (e: React.ChangeEvent<HTMLInputElement>) {
@@ -44,8 +44,8 @@ function Login () {
                     </div>
                     <div className="mb-3">
                         <div className="loginTitle">Password</div>
-                        <input type="text" className="form-control" value={password} 
-                            onChange={changePassword} onKeyDown={handleKeyDown} placeholder="e.g. 1234"></input>
+                        <input type="password" className="form-control" value={password} 
+                            onChange={changePassword} onKeyDown={handleKeyDown} placeholder="e.g. tester123"></input>
                     </div>
                     <button type="button" onClick={onLogin} className="btn btn-primary">Login</button>
                     <div className="mb3">
