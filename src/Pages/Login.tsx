@@ -28,7 +28,7 @@ function Login () {
             if (message.status === 200) {
                 history.push('/profile')
             } else {
-                setError(message)
+                setError(message.data)
             }
         })
     }
